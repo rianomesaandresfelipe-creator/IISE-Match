@@ -1,0 +1,25 @@
+const PROFILES = {
+  D: { code:'D', name:'Analista de Datos', emoji:'📊', color:'#4cc9f0', description:'Conviertes datos en decisiones. Tienes una mente analítica que detecta patrones, tendencias y oportunidades ocultas en los números.', keywords:['datos','análisis','Power BI','Excel','Python','visualización'], actividades_tipo: ['Curso','Taller'], tags_afinidad: ['datos','analitica','power_bi','excel','python','sql','visualizacion'] },
+  T: { code:'T', name:'Innovador Digital', emoji:'🤖', color:'#7b2fbe', description:'La tecnología es tu terreno. Exploras cómo la IA, la automatización y lo digital pueden transformar industrias completas.', keywords:['IA','automatización','tecnología','Python','Machine Learning','innovación'], actividades_tipo: ['Taller','Charla'], tags_afinidad: ['ia','automatizacion','tecnologia','python','transformacion_digital'] },
+  E: { code:'E', name:'Estratega Empresarial', emoji:'📈', color:'#f5a623', description:'Piensas en grande. Te apasiona entender los negocios de manera holística y tomar decisiones con impacto estratégico.', keywords:['estrategia','negocios','toma de decisiones','análisis','gestión'], actividades_tipo: ['Curso','Charla'], tags_afinidad: ['estrategia','negocios','gestion','toma_de_decisiones'] },
+  L: { code:'L', name:'Líder y Comunicador', emoji:'🤝', color:'#e94560', description:'Tu fortaleza está en las personas. Inspiras, persuades y construyes puentes entre equipos y stakeholders.', keywords:['liderazgo','negociación','comunicación','equipos','influencia'], actividades_tipo: ['Taller','Evento'], tags_afinidad: ['liderazgo','negociacion','comunicacion','equipos','habilidades_profesionales'] },
+  O: { code:'O', name:'Optimizador de Procesos', emoji:'⚙️', color:'#00d9a3', description:'Encuentras el desperdicio que otros no ven. Tu mentalidad está orientada a hacer los sistemas más eficientes y efectivos.', keywords:['Lean','optimización','procesos','eficiencia','mejora continua','simulación'], actividades_tipo: ['Taller','Curso'], tags_afinidad: ['lean','optimizacion','procesos','eficiencia','mejora_continua'] },
+  S: { code:'S', name:'Supply Chain Strategist', emoji:'🚚', color:'#06d6a0', description:'Entiendes que detrás de cada producto hay una cadena compleja. Te fascina optimizar el flujo desde el origen hasta el cliente.', keywords:['Supply Chain','logística','inventarios','compras','distribución'], actividades_tipo: ['Curso','Visita'], tags_afinidad: ['supply_chain','logistica','inventarios','compras','distribucion'] },
+  X: { code:'X', name:'Explorador Empresarial', emoji:'🏢', color:'#fb8500', description:'Aprendes viviendo experiencias reales. Te energiza conocer empresas, conectar con profesionales y descubrir cómo funciona el mundo corporativo.', keywords:['networking','visitas','experiencias','industria','conexiones'], actividades_tipo: ['Visita','Evento'], tags_afinidad: ['visita','networking','experiencia','empresas','profesionales'] },
+  P: { code:'P', name:'Constructor de Proyectos', emoji:'🚀', color:'#ff6b6b', description:'Eres un hacedor. Te impulsa tomar una idea, convertirla en un proyecto y llevarlo a la realidad con creatividad e iniciativa.', keywords:['proyectos','emprendimiento','innovación','gestión','acción'], actividades_tipo: ['Taller','Competencia'], tags_afinidad: ['proyectos','emprendimiento','innovacion','gestion','reto'] }
+};
+
+const COMBINED_PROFILES = [
+  { profiles: ['D','T'], name: 'Analista Digital', description: 'Combinas el poder de los datos con el pensamiento tecnológico.' },
+  { profiles: ['D','E'], name: 'Analista Estratégico', description: 'Usas datos para tomar decisiones de alto impacto empresarial.' },
+  { profiles: ['D','S'], name: 'Data Strategist en Supply Chain', description: 'Llevas la analítica al corazón de la cadena de suministro.' },
+  { profiles: ['T','P'], name: 'Innovador Emprendedor', description: 'Usas la tecnología como palanca para construir cosas nuevas.' },
+  { profiles: ['E','L'], name: 'Líder Estratégico', description: 'Combinas visión de negocio con capacidad de influir en personas.' },
+  { profiles: ['L','P'], name: 'Líder de Proyectos', description: 'Tienes la energía para liderar equipos y llevar proyectos a buen puerto.' },
+  { profiles: ['O','S'], name: 'Experto en Operaciones', description: 'Optimizas cada eslabón de la cadena de valor con precisión.' },
+  { profiles: ['S','L'], name: 'Negociador de Supply Chain', description: 'Combinas gestión de cadena de suministro con habilidades de negociación.' },
+  { profiles: ['X','L'], name: 'Conector Empresarial', description: 'Construyes relaciones genuinas mientras exploras el mundo corporativo.' },
+  { profiles: ['T','O'], name: 'Automatizador de Procesos', description: 'Usas tecnología para hacer los procesos más eficientes.' },
+  { profiles: ['D','O'], name: 'Ingeniero de Datos y Procesos', description: 'Analizas datos para optimizar sistemas y procesos.' },
+  { profiles: ['E','P'], name: 'Emprendedor Estratégico', description: 'Tienes visión estratégica para llevar proyectos de innovación al éxito.' }
+];
