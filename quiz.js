@@ -36,9 +36,42 @@ class Quiz {
     document.getElementById('prev-btn').addEventListener('click', () => this._onPrev());
   }
 
+  /* ── Dynamic Adaptive Questions Engine ─── */
+  getActiveQuestions() {
+    const active = [];
+    const selectedInterests = this.answers['q5'] || [];
+    const selectedCareer = this.answers['q1'] || '';
+
+    // 1. Core Module A base questions (always first)
+    const baseCoreIds = ['q1', 'q2', 'q3', 'q4', 'q5'];
+    baseCoreIds.forEach(id => {
+      const q = QUESTIONS.find(item => item.id === id);
+      if (q) active.push(q);
+    });
+
+    // 2. Adaptive Branch questions matching selected interests in Q5 or career in Q1
+    QUESTIONS.filter(q => q.branch).forEach(q => {
+      if (q.condition && q.condition(this.answers, selectedInterests, selectedCareer)) {
+        active.push(q);
+      }
+    });
+
+    // 3. General closing evaluation questions
+    const closingIds = ['q9', 'q15', 'q16', 'q18'];
+    closingIds.forEach(id => {
+      if (!active.some(item => item.id === id)) {
+        const q = QUESTIONS.find(item => item.id === id);
+        if (q) active.push(q);
+      }
+    });
+
+    return active;
+  }
+
   /* ── Navigation ─── */
   _onNext() {
-    if (this.currentIndex < QUESTIONS.length - 1) {
+    const active = this.getActiveQuestions();
+    if (this.currentIndex < active.length - 1) {
       this.currentIndex++;
       this.render();
     } else {
@@ -55,8 +88,13 @@ class Quiz {
 
   /* ── Render Current Question ─── */
   render() {
-    const q = QUESTIONS[this.currentIndex];
-    const total = QUESTIONS.length;
+    const active = this.getActiveQuestions();
+    if (this.currentIndex >= active.length) {
+      this.currentIndex = active.length - 1;
+    }
+
+    const q = active[this.currentIndex];
+    const total = active.length;
 
     // Progress
     const pct = Math.round(((this.currentIndex + 1) / total) * 100);
@@ -68,11 +106,11 @@ class Quiz {
     // Module label
     const moduleLabels = {
       A: '📋 Módulo A — Información básica',
-      B: '🎯 Módulo B — Intereses',
+      B: '🎯 Módulo B — Especialidad & Intereses',
       C: '🧩 Módulo C — Escenarios',
       D: '⚙️ Módulo D — Preferencias',
     };
-    document.getElementById('module-title').textContent = moduleLabels[q.module] || '';
+    document.getElementById('module-title').textContent = moduleLabels[q.module] || '🎯 Pregunta Adaptativa';
 
     // Render question content
     const container = document.getElementById('question-container');
@@ -313,7 +351,8 @@ class Quiz {
     // If scale: always has a default value
     if (q.type === 'scale') nextBtn.disabled = false;
 
-    nextBtn.textContent = this.currentIndex === QUESTIONS.length - 1 ? 'Finalizar ✓' : 'Siguiente →';
+    const active = this.getActiveQuestions();
+    nextBtn.textContent = this.currentIndex === active.length - 1 ? 'Finalizar ✓' : 'Siguiente →';
     prevBtn.style.visibility = this.currentIndex === 0 ? 'hidden' : 'visible';
   }
 
