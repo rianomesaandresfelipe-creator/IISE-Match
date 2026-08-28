@@ -8,7 +8,7 @@ const Weights = {
 
 class ScoringEngine {
   constructor() {
-    this.rawScores = { D:0, T:0, E:0, L:0, O:0, S:0, X:0, P:0 };
+    this.rawScores = { D:0, T:0, E:0, L:0, O:0, S:0, X:0, P:0, F:0, H:0, G:0, C:0 };
     this.percentages = {};
     this.topProfiles = [];
     this.tags = {}; // keep track of tags for recommender
@@ -60,16 +60,16 @@ class ScoringEngine {
 
   normalizeScores() {
     // Calculate maximum possible score per profile across answered questions
-    const maxPossiblePerProfile = { D: 0, T: 0, E: 0, L: 0, O: 0, S: 0, X: 0, P: 0 };
+    const maxPossiblePerProfile = { D: 0, T: 0, E: 0, L: 0, O: 0, S: 0, X: 0, P: 0, F: 0, H: 0, G: 0, C: 0 };
 
     QUESTIONS.forEach(q => {
       const weight = Weights[q.id] || 1;
-      const profileMaxInQuestion = { D: 0, T: 0, E: 0, L: 0, O: 0, S: 0, X: 0, P: 0 };
+      const profileMaxInQuestion = { D: 0, T: 0, E: 0, L: 0, O: 0, S: 0, X: 0, P: 0, F: 0, H: 0, G: 0, C: 0 };
 
       if (q.options) {
         if (q.type === 'multiselect') {
           const limit = q.maxSelections || 3;
-          ['D', 'T', 'E', 'L', 'O', 'S', 'X', 'P'].forEach(p => {
+          ['D', 'T', 'E', 'L', 'O', 'S', 'X', 'P', 'F', 'H', 'G', 'C'].forEach(p => {
             const vals = q.options.map(o => (o.scores ? o.scores[p] || 0 : 0)).sort((a, b) => b - a);
             const topSum = vals.slice(0, limit).reduce((acc, curr) => acc + curr, 0);
             profileMaxInQuestion[p] = topSum;
