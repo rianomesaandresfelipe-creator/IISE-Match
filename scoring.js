@@ -59,19 +59,48 @@ class ScoringEngine {
   }
 
   normalizeScores() {
-    let maxPossible = 0;
-    // Approximating max possible score per profile based on answers is tricky, 
-    // we can either normalize over the sum of all profiles or the max profile score.
-    // Let's normalize relative to the maximum profile score obtained.
-    let maxScore = Math.max(...Object.values(this.rawScores));
-    if (maxScore === 0) maxScore = 1; // avoid division by zero
-    
-    for (let profile in this.rawScores) {
-      this.percentages[profile] = Math.round((this.rawScores[profile] / maxScore) * 100);
+    // Calculate maximum possible score per profile across answered questions
+    const maxPossiblePerProfile = { D: 0, T: 0, E: 0, L: 0, O: 0, S: 0, X: 0, P: 0 };
+
+    QUESTIONS.forEach(q => {
+      const weight = Weights[q.id] || 1;
+      const profileMaxInQuestion = { D: 0, T: 0, E: 0, L: 0, O: 0, S: 0, X: 0, P: 0 };
+
+      if (q.options) {
+        if (q.type === 'multiselect') {
+          const limit = q.maxSelections || 3;
+          ['D', 'T', 'E', 'L', 'O', 'S', 'X', 'P'].forEach(p => {
+            const vals = q.options.map(o => (o.scores ? o.scores[p] || 0 : 0)).sort((a, b) => b - a);
+            const topSum = vals.slice(0, limit).reduce((acc, curr) => acc + curr, 0);
+            profileMaxInQuestion[p] = topSum;
+          });
+        } else {
+          q.options.forEach(o => {
+            if (o.scores) {
+              for (let p in o.scores) {
+                if (o.scores[p] > (profileMaxInQuestion[p] || 0)) {
+                  profileMaxInQuestion[p] = o.scores[p];
+                }
+              }
+            }
+          });
+        }
+      }
+
+      for (let p in maxPossiblePerProfile) {
+        maxPossiblePerProfile[p] += (profileMaxInQuestion[p] || 0) * weight;
+      }
+    });
+
+    for (let p in this.rawScores) {
+      const maxP = maxPossiblePerProfile[p] || 1;
+      // Calculate absolute affinity percentage (realistic scale, e.g. 85%, 72%, 48%)
+      const calcPct = Math.round((this.rawScores[p] / maxP) * 100);
+      this.percentages[p] = Math.min(Math.max(calcPct, 12), 96);
     }
 
     // Determine Top Profiles
-    let sorted = Object.entries(this.percentages).sort((a,b) => b[1] - a[1]);
+    let sorted = Object.entries(this.percentages).sort((a, b) => b[1] - a[1]);
     this.topProfiles = sorted.slice(0, 3);
   }
   
